@@ -1,3 +1,6 @@
 [submodule "components/meshtastic/meshtastic-firmware"]
 	path = components/meshtastic/meshtastic-firmware
 	url = https://github.com/meshtastic/firmware
+[submodule "meshtastic-protobufs"]
+	path = meshtastic-protobufs
+	url = https://github.com/meshtastic/protobufs.git
