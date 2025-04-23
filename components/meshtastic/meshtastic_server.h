@@ -1,11 +1,10 @@
 #pragma once
 
 #include "esphome/core/defines.h"
-#ifdef USE_MESHTASTIC
+// #ifdef USE_MESHTASTIC
+#include "src/mesh/MeshModule.h"
 #include "src/mesh/Router.h"
-// #include "meshtastic_noise_context.h"
-// #include "meshtastic_pb2.h"
-// #include "meshtastic_pb2_service.h"
+
 // #include "esphome/components/socket/socket.h"
 // #include "esphome/core/automation.h"
 #include "esphome/core/component.h"
@@ -163,4 +162,4 @@ template<typename... Ts> class MeshtasticConnectedCondition : public Condition<T
 
 }  // namespace meshtastic
 }  // namespace esphome
-#endif
+// #endif  // USE_MESHTASTIC
