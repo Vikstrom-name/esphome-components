@@ -1,7 +1,6 @@
 #include "esphome/core/log.h"
 #include "esphome/core/application.h"
 #include "lorawan.h"
-
 // #include "esphome/components/xxtea/xxtea.h"
 
 namespace esphome {
@@ -168,10 +167,10 @@ void LoRaWAN::flush_() {
   auto encode_buffer = std::vector<uint8_t>(round4(header_len + len));
   memcpy(encode_buffer.data(), this->header_.data(), this->header_.size());
   memcpy(encode_buffer.data() + header_len, this->data_.data(), this->data_.size());
-  if (this->is_encrypted_()) {
-    xxtea::encrypt((uint32_t *) (encode_buffer.data() + header_len), len / 4,
-                   (uint32_t *) this->encryption_key_.data());
-  }
+  // if (this->is_encrypted_()) {
+  //   xxtea::encrypt((uint32_t *) (encode_buffer.data() + header_len), len / 4,
+  //                  (uint32_t *) this->encryption_key_.data());
+  // }
   this->send_packet(encode_buffer);
 }
 
@@ -332,9 +331,9 @@ void LoRaWAN::process_(std::vector<uint8_t> &data) {
   auto &binary_sensors = this->remote_binary_sensors_[namebuf];
 #endif
 
-  if (!provider.encryption_key.empty()) {
-    xxtea::decrypt((uint32_t *) buf, (end - buf) / 4, (uint32_t *) provider.encryption_key.data());
-  }
+  // if (!provider.encryption_key.empty()) {
+  //   xxtea::decrypt((uint32_t *) buf, (end - buf) / 4, (uint32_t *) provider.encryption_key.data());
+  // }
   byte = *buf++;
   if (byte == ROLLING_CODE_KEY) {
     if (!process_rolling_code(provider, buf, end))
