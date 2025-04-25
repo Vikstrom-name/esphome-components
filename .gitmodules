@@ -1,0 +1,3 @@
+[submodule "components/lorawan/swl2001"]
+	path = components/lorawan/swl2001
+	url = https://github.com/Lora-net/SWL2001.git
