@@ -1,0 +1,1 @@
+swl2001/lbm_lib/smtc_modem_api/smtc_modem_api.h

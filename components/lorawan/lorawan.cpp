@@ -3,11 +3,12 @@
 #include "lorawan.h"
 
 // #include "swl2001/lbm_lib/smtc_modem_api/smtc_modem_api.h"
-#include "esphome/components/lorawan/swl2001/lbm_lib/smtc_modem_api/smtc_modem_api.h"
+#include "smtc_modem_api.h"
 
 
 extern "C" {
-    #include "swl2001/lbm_lib/smtc_modem_core/smtc_modem.c"
+    // #include "swl2001/lbm_lib/smtc_modem_core/smtc_modem.c"
+    #include "smtc_modem.c"  // But then all it's dependencies must be included too.
 }
 
 // #include "esphome/components/xxtea/xxtea.h"
