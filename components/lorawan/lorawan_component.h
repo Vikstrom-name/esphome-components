@@ -6,6 +6,8 @@
 namespace esphome {
 namespace lorawan {
 
+static constexpr size_t MAX_PAYLOAD_SIZE = 256; // Adjust as needed
+
 class LoRaWANComponent : public Component {
  public:
   void setup() override {}
@@ -28,6 +30,9 @@ class LoRaWANComponent : public Component {
     // radio.send(data, length);
   }
   void on_radio_receive(const uint8_t *data, size_t length);
+  void handle_normal_packet(const uint8_t *data, size_t length);
+  bool verify_mic(const uint8_t *data, size_t data_len, const uint8_t *mic, const uint8_t *key);
+  void process_payload(const uint8_t *payload, size_t length);
 };
 
 }  // namespace lorawan
