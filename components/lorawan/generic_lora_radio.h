@@ -1,7 +1,7 @@
 #pragma once
 
 #include "lora_radio_interface.h"
-#include "esphome/components/sx126x/sx126x.h"
+// #include "esphome/components/sx126x/sx126x.h"
 #include "esphome/components/sx127x/sx127x.h"
 
 // Forward declarations for SX drivers
@@ -13,8 +13,8 @@ namespace lorawan {
 
 class GenericLoRaRadio : public LoRaRadioInterface {
  public:
+//   explicit GenericLoRaRadio(SX126x *radio);
   explicit GenericLoRaRadio(SX127x *radio);
-  explicit GenericLoRaRadio(SX126x *radio);
 
   bool begin() override;
   void send(const std::vector<uint8_t> &packet) override;
@@ -26,8 +26,8 @@ class GenericLoRaRadio : public LoRaRadioInterface {
 
  private:
   enum RadioType {
-    RADIO_SX127X,
     RADIO_SX126X,
+    RADIO_SX127X,
   };
 
   RadioType radio_type_;
