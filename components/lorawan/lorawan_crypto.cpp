@@ -7,7 +7,7 @@
 namespace esphome {
 namespace lorawan {
 
-static const char *const TAG = "LoRaWAN_crypo";
+static const char *const TAG = "LoRaWAN_Crypo";
 
 
 // Calculate MIC using AES-CMAC

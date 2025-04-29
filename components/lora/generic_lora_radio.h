@@ -5,8 +5,8 @@
 #include "esphome/components/sx127x/sx127x.h"
 
 // Forward declarations for SX drivers
-// class SX127x;
 // class SX126x;
+// class SX127x;
 
 namespace esphome {
 namespace lorawan {
