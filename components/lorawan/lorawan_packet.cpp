@@ -15,7 +15,7 @@ LoRaWANPacket::LoRaWANPacket(const std::vector<uint8_t> &payload) {
   }
     
   this->mhdr_ = payload[0];
-  this->dev_addr_ = { payload[1], payload[2], payload[3], payload[4] };
+//   this->dev_addr_ = { payload[1], payload[2], payload[3], payload[4] };  / Moved to LoRaWANSession
   this->fcnt_ = static_cast<uint16_t>(payload[6]) | (static_cast<uint16_t>(payload[7]) << 8);
   this->fport_ = payload[8];
     

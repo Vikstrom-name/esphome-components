@@ -1,7 +1,8 @@
 #include "lorawan_component.h"
+#include "esphome/core/hal.h"
 #include "esphome/core/log.h"
-#include "mbedtls/aes.h"
-#include "mbedtls/cmac.h"
+// #include "mbedtls/aes.h"
+// #include "mbedtls/cmac.h"
 
 namespace esphome {
 namespace lorawan {
@@ -47,18 +48,18 @@ void LoRaWANComponent::send_join_request_() {
   this->session_ = std::make_unique<LoRaWANSession>();
 
   LoRaWANPacket packet;
-  packet.set_mhdr(0x00);  // MHDR Join Request
-  packet.set_app_eui(app_eui_);
-  packet.set_dev_eui(dev_eui_);
-
-  dev_nonce_++;
-  packet.set_dev_nonce(dev_nonce_);
+  packet.construct_join_request(this->app_eui_, this->dev_eui_, this->dev_nonce_++);
 
   // Calculate MIC using Crypto (AES-CMAC)
-  LoRaWANCrypto::calculate_mic(packet.get_data(), packet.size(), app_key_, packet.get_mic());
+  // LoRaWANCrypto::calculate_mic(packet.get_payload(), this->app_key_, packet.get_mic());
+  uint8_t *mic_out;
+  LoRaWANCrypto::calculate_mic(packet.get_payload(), this->app_key_, mic_out);
+  std::array<uint8_t, 4> mic_array;
+  std::copy(mic_out, mic_out + 4, mic_array.begin()); 
+  packet.set_mic(mic_array);
 
   // Send the packet using the radio interface
-  radio_->send(packet.get_data());
+  radio_->send(packet.get_payload());
   radio_->receive();
 }
 
@@ -88,7 +89,7 @@ void LoRaWANComponent::on_radio_receive_(const std::vector<uint8_t> &packet) {
 bool LoRaWANComponent::process_join_response(const LoRaWANPacket lorawan_packet){
 
   std::vector<uint8_t> decrypted;
-  LoRaWANCrypto::decrypt_join_accept(lorawan_packet.get_payload(), decrypted);
+  LoRaWANCrypto::decrypt_join_accept(lorawan_packet.get_payload(), decrypted, this->app_key_);
   
   std::array<uint8_t, 16> nwk_skey_;
   std::array<uint8_t, 16> app_skey_;

@@ -34,26 +34,29 @@ class LoRaWANPacket {
   LoRaWANPacket(const std::vector<uint8_t>& payload);
 
   // Setters and Getters
-  void set_mhdr(uint8_t mhdr) { mhdr_ = mhdr; }
-  uint8_t get_mhdr() const { return mhdr_; }
+  void set_mhdr(uint8_t mhdr) { this->mhdr_ = mhdr; }
+  uint8_t get_mhdr() const { return this->mhdr_; }
 
-  void set_fcnt(uint16_t fcnt) { fcnt_ = fcnt; }
-  uint16_t get_fcnt() const { return fcnt_; }
+  void set_fcnt(uint16_t fcnt) { this->fcnt_ = fcnt; }
+  uint16_t get_fcnt() const { return this->fcnt_; }
 
-  void set_fport(uint8_t fport) { fport_ = fport; }
-  uint8_t get_fport() const { return fport_; }
+  void set_fport(uint8_t fport) { this->fport_ = fport; }
+  uint8_t get_fport() const { return this->fport_; }
 
-  void set_mic(const std::array<uint8_t, 4>& mic) { mic_ = mic; }
-  const std::array<uint8_t, 4>& get_mic() const { return mic_; }
+  void set_mic(const std::array<uint8_t, 4>& mic) { this->mic_ = mic; }
+  const std::array<uint8_t, 4>& get_mic() const { return this->mic_; }
 
-  void set_payload(const std::vector<uint8_t>& payload) { payload_ = payload; }
-  const std::vector<uint8_t>& get_payload() const { return payload_; }
+  void set_payload(const std::vector<uint8_t>& payload) { this->payload_ = payload; }
+  const std::vector<uint8_t>& get_payload() const { return this->payload_; }
 
   // Methods to construct the packet
   void construct_join_request(const std::array<uint8_t, 8>& app_eui, const std::array<uint8_t, 8>& dev_eui,
                                uint16_t dev_nonce);
 
   void construct_join_accept(const std::vector<uint8_t>& decrypted_payload);
+
+  // LoRaWAN MHDR for Join Accept is 0x20
+  bool is_join_accept() const { return this->mhdr_ == 0x20; } // Check if the packet is a Join Accept
 
   // Methods for MIC calculation and validation
   bool calculate_mic(const std::array<uint8_t, 16>& app_key, uint8_t* out_mic);

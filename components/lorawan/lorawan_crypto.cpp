@@ -1,23 +1,35 @@
+#include "esphome/core/log.h"
 #include "lorawan_crypto.h"
 // #include "mbedtls/aes.h"
-// #include "mbedtls/cmac.h"
+#include "mbedtls/cmac.h"
 #include <cstring>
 
 namespace esphome {
 namespace lorawan {
 
+static const char *const TAG = "LoRaWAN_crypo";
 
-// // Calculate MIC using AES-CMAC
-// void LoRaWANCrypto::calculate_mic(const std::vector<uint8_t>& packet, size_t packet_size, const std::array<uint8_t, 16>& key, uint8_t* mic_out) {
-//   mbedtls_cipher_context_t ctx;
-//   const mbedtls_cipher_info_t* cipher_info = mbedtls_cipher_info_from_type(MBEDTLS_CIPHER_AES_128_ECB);
-//   mbedtls_cipher_init(&ctx);
-//   mbedtls_cipher_setup(&ctx, cipher_info);
-//   mbedtls_cipher_cmac_starts(&ctx, key.data(), 128);
-//   mbedtls_cipher_cmac_update(&ctx, packet.data(), packet_size);
-//   mbedtls_cipher_cmac_finish(&ctx, mic_out);
-//   mbedtls_cipher_free(&ctx);
-// }
+
+// Calculate MIC using AES-CMAC
+void LoRaWANCrypto::calculate_mic(const std::vector<uint8_t>& packet,
+                                  const std::array<uint8_t, 16>& key,
+                                  uint8_t* mic_out) {
+  const mbedtls_cipher_info_t *cipher_info = mbedtls_cipher_info_from_type(MBEDTLS_CIPHER_AES_128_ECB);
+  if (cipher_info == nullptr) {
+  ESP_LOGE(TAG, "Failed to get AES cipher info");
+    return;
+  }
+
+  unsigned char *mic_out_local;
+//   int err = mbedtls_cipher_cmac(cipher_info, key.data(), 128,
+//                                 packet.data(), packet.size(), mic_out);
+  int err = mbedtls_cipher_cmac(cipher_info, key.data(), 128,
+                                packet.data(), packet.size(), mic_out_local);
+  mic_out = mic_out_local;
+  if (err != 0) {
+    ESP_LOGE(TAG, "CMAC calculation failed: -0x%04X", -err);
+  }
+}
 
 
 // Decrypt Join Accept message using AES
