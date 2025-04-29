@@ -13,9 +13,30 @@
 namespace esphome {
 namespace lorawan {
 
+// ToDo: REMOVE, dummy implementation of LoRaRadioInterface
+class DummyRadio : public LoRaRadioInterface {
+ public:
+  bool begin() override { return true; }
+  void send(const std::vector<uint8_t> &packet) override {}
+  void set_rx_callback(std::function<void(const std::vector<uint8_t>&)>) override {}
+  void sleep() override {}
+  void receive() override {}
+};
+// virtual bool begin() = 0;
+// virtual void send(const std::vector<uint8_t> &packet) = 0;
+// virtual void set_rx_callback(RxCallback cb) = 0;
+// virtual void set_frequency(uint32_t frequency_hz) = 0;
+// virtual void set_tx_power(uint8_t dbm) = 0;
+// virtual void sleep() = 0;
+// virtual void receive() = 0;
+
 class LoRaWANComponent : public Component {
  public:
-  LoRaWANComponent(std::shared_ptr<LoRaRadioInterface> radio)
+  // ToDo: REMOVE, temporary default constructor
+  LoRaWANComponent()
+    : LoRaWANComponent(std::make_shared<DummyRadio>()) {}
+  // Constructor to initialize with a radio interface
+  explicit LoRaWANComponent(std::shared_ptr<LoRaRadioInterface> radio)
       : radio_(radio), joined_(false), dev_nonce_(0),
         app_key_{}, dev_eui_{}, app_eui_{} {}
 
