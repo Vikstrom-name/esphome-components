@@ -1,19 +1,5 @@
-/*
-Explanation:
-1. LoRaWANSession Keys (nwk_skey_ and app_skey_): These keys are set during the join procedure.
-   You use them to encrypt/decrypt messages.
-
-2. DevAddr: The unique address assigned to the device after the join process.
-
-3. Methods:
-  * set_keys() is used to store the session keys.
-  * set_dev_addr() stores the device address.
-  * get_nwk_skey(), get_app_skey(), and get_devaddr() allow access to these values later.
-
-Now, when a successful join happens and keys are derived, they will be saved in this LoRaWANSession class,
-and you can retrieve them whenever needed (e.g., for packet encryption, decryption, etc.).
-*/
 #pragma once
+
 #include <array>
 #include <cstdint>
 

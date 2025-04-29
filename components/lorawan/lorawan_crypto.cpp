@@ -1,7 +1,8 @@
 #include "esphome/core/log.h"
-#include "lorawan_crypto.h"
-// #include "mbedtls/aes.h"
 #include "mbedtls/cmac.h"
+
+#include "lorawan_crypto.h"
+
 #include <cstring>
 
 namespace esphome {

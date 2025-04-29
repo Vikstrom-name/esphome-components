@@ -1,11 +1,12 @@
 #pragma once
 
 #include "esphome/core/component.h"
+#include "esphome/core/log.h"
+
 #include "lorawan_packet.h"
 #include "lorawan_crypto.h"
 #include "lorawan_session.h"
 #include "lora_radio_interface.h"
-#include "esphome/core/log.h"
 
 #include <vector>
 #include <memory>
@@ -13,33 +14,32 @@
 namespace esphome {
 namespace lorawan {
 
+#ifdef LORAWAN_INCLUDE_DUMMY_RADIO
 // ToDo: REMOVE, dummy implementation of LoRaRadioInterface
 class DummyRadio : public LoRaRadioInterface {
  public:
   bool begin() override { return true; }
-  void send(const std::vector<uint8_t> &packet) override {}
-  void set_rx_callback(std::function<void(const std::vector<uint8_t>&)>) override {}
+  void send(const std::vector<uint8_t>&) override {}
+  void set_rx_callback(RxCallback) override {}
+  void set_frequency(uint32_t) override {}
+  void set_tx_power(uint8_t) override {}
   void sleep() override {}
   void receive() override {}
 };
-// virtual bool begin() = 0;
-// virtual void send(const std::vector<uint8_t> &packet) = 0;
-// virtual void set_rx_callback(RxCallback cb) = 0;
-// virtual void set_frequency(uint32_t frequency_hz) = 0;
-// virtual void set_tx_power(uint8_t dbm) = 0;
-// virtual void sleep() = 0;
-// virtual void receive() = 0;
+#endif
 
 class LoRaWANComponent : public Component {
  public:
-  // ToDo: REMOVE, temporary default constructor
-  LoRaWANComponent()
-    : LoRaWANComponent(std::make_shared<DummyRadio>()) {}
   // Constructor to initialize with a radio interface
   explicit LoRaWANComponent(std::shared_ptr<LoRaRadioInterface> radio)
       : radio_(radio), joined_(false), dev_nonce_(0),
         app_key_{}, dev_eui_{}, app_eui_{} {}
-
+#ifdef LORAWAN_INCLUDE_DUMMY_RADIO
+  // ToDo: REMOVE, temporary default constructor
+  LoRaWANComponent()
+      : LoRaWANComponent(std::make_shared<DummyRadio>()) {}
+#endif
+       
   void setup() override;
   void loop() override;
   void set_app_key(const std::vector<uint8_t> &app_key) {

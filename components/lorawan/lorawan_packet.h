@@ -1,28 +1,9 @@
-/*
-Explanation of the Class and Methods:
-1. Attributes:
-  * mhdr_: Message Header (MHDR), used to indicate the type of the LoRaWAN
-    packet (e.g., Join Request, Data Packet, etc.).
-  * fcnt_: Frame counter, used to track packet sequencing in LoRaWAN.
-  * fport_: Frame port, which identifies the application port of the message.
-  * payload_: The actual data being transmitted in the packet.
-  * mic_: Message Integrity Code (MIC), used to verify the integrity of the packet.
+#pragma once
 
-2. Methods:
-  * construct_join_request: Creates a Join Request packet, adding the necessary fields such as AppEUI, DevEUI, and DevNonce.
-  * construct_join_accept: Constructs a Join Accept packet from the decrypted payload.
-  * calculate_mic: Computes the MIC for the packet using AES-CMAC with the provided app_key.
-  * verify_mic: Verifies the MIC by comparing it to the provided MIC in the packet.
-  * encode: Serializes the packet to a byte array for transmission.
-  * decode: Deserializes the packet from a byte array.
-*/
-
-#ifndef LORAWAN_PACKET_H
-#define LORAWAN_PACKET_H
+#include "esphome/core/log.h"
 
 #include <vector>
 #include <array>
-#include "esphome/core/log.h"
 
 namespace esphome {
 namespace lorawan {
@@ -76,5 +57,3 @@ class LoRaWANPacket {
 
 }  // namespace lorawan
 }  // namespace esphome
-
-#endif  // LORAWAN_PACKET_H

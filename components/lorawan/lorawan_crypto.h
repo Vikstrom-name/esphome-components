@@ -1,27 +1,11 @@
-/*
-Explanation:
-1. AES Encryption/Decryption: The LoRaWANCrypto class provides two sets of methods: one for encrypting
-   and one for decrypting. Each set uses either the NwkSKey or the AppSKey from the Session class.
-
-2. aes_encrypt and aes_decrypt: These functions use the mbedtls_aes_* functions to perform AES
-   encryption and decryption in ECB mode.
-
-3. Session Reference: The class holds a reference to the Session object to access the AppSKey and NwkSKey.
-
-Next Steps:
-* With this LoRaWANCrypto class, you can now encrypt or decrypt data packets before sending or after receiving them.
-
-* You would likely call the encrypt_app() or decrypt_app() methods for application layer data
-  encryption/decryption and the encrypt_nwk() or decrypt_nwk() methods for network layer data.
-*/
 #pragma once
+
+#define MBEDTLS_AES_ALT
+#include <aes_alt.h>
 
 #include <vector>
 #include <array>
 
-#define MBEDTLS_AES_ALT
-#include <aes_alt.h>
-// #include <mbedtls/aes.h>
 
 namespace esphome {
 namespace lorawan {
