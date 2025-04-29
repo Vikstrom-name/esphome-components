@@ -1,7 +1,8 @@
-#define MBEDTLS_AES_ALT
 #include "lorawan_packet.h"
 #include "mbedtls/aes.h"
 #include "mbedtls/cmac.h"
+
+#include <cstring>
 
 namespace esphome {
 namespace lorawan {
@@ -9,7 +10,7 @@ namespace lorawan {
 
 LoRaWANPacket::LoRaWANPacket(const std::vector<uint8_t> &payload) {
   if (payload.size() < 12) {
-    valid_ = false;
+    // valid_ = false;
     return;
   }
     
@@ -26,7 +27,7 @@ LoRaWANPacket::LoRaWANPacket(const std::vector<uint8_t> &payload) {
     
   std::copy(payload.end() - 4, payload.end(), mic_.begin());
     
-  valid_ = true;
+//   valid_ = true;
 }
       
 

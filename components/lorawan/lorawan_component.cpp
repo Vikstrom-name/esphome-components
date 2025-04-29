@@ -88,7 +88,7 @@ void LoRaWANComponent::on_radio_receive_(const std::vector<uint8_t> &packet) {
 bool LoRaWANComponent::process_join_response(const LoRaWANPacket lorawan_packet){
 
   std::vector<uint8_t> decrypted;
-  LoRaWANCrypto::decrypt_join_accept(lorawan_packet, decrypted);
+  LoRaWANCrypto::decrypt_join_accept(lorawan_packet.get_payload(), decrypted);
   
   std::array<uint8_t, 16> nwk_skey_;
   std::array<uint8_t, 16> app_skey_;

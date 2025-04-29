@@ -1,27 +1,29 @@
 #include "lorawan_crypto.h"
-#include "mbedtls/aes.h"
-#include "mbedtls/cmac.h"
+// #include "mbedtls/aes.h"
+// #include "mbedtls/cmac.h"
 #include <cstring>
 
 namespace esphome {
 namespace lorawan {
 
 
-// Calculate MIC using AES-CMAC
-void LoRaWANCrypto::calculate_mic(const std::vector<uint8_t>& packet, size_t packet_size, const std::array<uint8_t, 16>& key, uint8_t* mic_out) {
-  mbedtls_cipher_context_t ctx;
-  const mbedtls_cipher_info_t* cipher_info = mbedtls_cipher_info_from_type(MBEDTLS_CIPHER_AES_128_ECB);
-  mbedtls_cipher_init(&ctx);
-  mbedtls_cipher_setup(&ctx, cipher_info);
-  mbedtls_cipher_cmac_starts(&ctx, key.data(), 128);
-  mbedtls_cipher_cmac_update(&ctx, packet.data(), packet_size);
-  mbedtls_cipher_cmac_finish(&ctx, mic_out);
-  mbedtls_cipher_free(&ctx);
-}
+// // Calculate MIC using AES-CMAC
+// void LoRaWANCrypto::calculate_mic(const std::vector<uint8_t>& packet, size_t packet_size, const std::array<uint8_t, 16>& key, uint8_t* mic_out) {
+//   mbedtls_cipher_context_t ctx;
+//   const mbedtls_cipher_info_t* cipher_info = mbedtls_cipher_info_from_type(MBEDTLS_CIPHER_AES_128_ECB);
+//   mbedtls_cipher_init(&ctx);
+//   mbedtls_cipher_setup(&ctx, cipher_info);
+//   mbedtls_cipher_cmac_starts(&ctx, key.data(), 128);
+//   mbedtls_cipher_cmac_update(&ctx, packet.data(), packet_size);
+//   mbedtls_cipher_cmac_finish(&ctx, mic_out);
+//   mbedtls_cipher_free(&ctx);
+// }
 
 
 // Decrypt Join Accept message using AES
-void LoRaWANCrypto::decrypt_join_accept(const std::vector<uint8_t>& encrypted, std::vector<uint8_t>& decrypted, const std::array<uint8_t, 16>& key) {
+void LoRaWANCrypto::decrypt_join_accept(const std::vector<uint8_t>& encrypted,
+                                        std::vector<uint8_t>& decrypted,
+                                        const std::array<uint8_t, 16>& key) {
   decrypted.resize(encrypted.size());
   aes_crypt(encrypted.data(), decrypted.data(), key, false);
 }
@@ -63,6 +65,7 @@ void LoRaWANCrypto::decrypt_app(const std::vector<uint8_t>& encrypted, const std
 void LoRaWANCrypto::encrypt_ntw(const std::vector<uint8_t>& data, const std::array<uint8_t, 16>& key, std::vector<uint8_t>& encrypted) {
   encrypted.resize(data.size());
   aes_crypt(data.data(), encrypted.data(), key, true);
+  
 }
 
 
@@ -74,14 +77,16 @@ void LoRaWANCrypto::decrypt_ntw(const std::vector<uint8_t>& encrypted, const std
 
 
 // Helper function for AES encryption/decryption (ECB mode)
-void LoRaWANCrypto::aes_crypt(const uint8_t* input, uint8_t* output, const std::array<uint8_t, 16>& key, bool encrypt) {
+void LoRaWANCrypto::aes_crypt(const uint8_t* input, uint8_t* output,
+                              const std::array<uint8_t, 16>& key,
+                              bool encrypt) {
   mbedtls_aes_context aes;
   mbedtls_aes_init(&aes);
   mbedtls_aes_setkey_enc(&aes, key.data(), 128);  // Use encryption key for both encryption and decryption (ECB mode)
   if (encrypt) {
-    mbedtls_aes_crypt_ecb(&aes, MBEDTLS_AES_ENCRYPT, input, output);
+    mbedtls_aes_crypt_ecb(&aes, ESP_AES_ENCRYPT, input, output);
   } else {
-    mbedtls_aes_crypt_ecb(&aes, MBEDTLS_AES_DECRYPT, input, output);
+    mbedtls_aes_crypt_ecb(&aes, ESP_AES_DECRYPT, input, output);
   }
   mbedtls_aes_free(&aes);
 }
