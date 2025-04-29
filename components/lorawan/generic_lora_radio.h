@@ -1,10 +1,12 @@
 #pragma once
 
 #include "lora_radio_interface.h"
+#include "esphome/components/sx126x/sx126x.h"
+#include "esphome/components/sx127x/sx127x.h"
 
 // Forward declarations for SX drivers
-class SX127x;
-class SX126x;
+// class SX127x;
+// class SX126x;
 
 namespace esphome {
 namespace lorawan {

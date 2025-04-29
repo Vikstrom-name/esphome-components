@@ -5,7 +5,7 @@ from esphome.const import (
 )
 
 CODEOWNERS = ["@dala318"]
-# DEPENDENCIES = ["esp32"]
+# DEPENDENCIES = [ "sx126x", "sx127x" ]
 
 lorawan_ns = cg.esphome_ns.namespace("lorawan")
 LoRaWANComponent = lorawan_ns.class_("LoRaWANComponent", cg.Component)
