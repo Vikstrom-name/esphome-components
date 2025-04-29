@@ -14,7 +14,8 @@ namespace lorawan {
 class LoRaWANComponent : public Component {
  public:
   LoRaWANComponent(std::shared_ptr<LoRaRadioInterface> radio)
-      : radio_(radio), joined_(false), dev_nonce_(0) {}
+      : radio_(radio), joined_(false), dev_nonce_(0),
+        app_key_{}, dev_eui_{}, app_eui_{} {}
 
   void setup() override;
   void loop() override;
@@ -33,7 +34,7 @@ class LoRaWANComponent : public Component {
  private:
   void send_join_request_();
   void on_radio_receive_(const std::vector<uint8_t> &packet);
-  void process_join_response(const std::vector<uint8_t>& decrypted);
+  bool process_join_response(const std::vector<uint8_t>& decrypted);
 
   //   std::array<uint8_t, 16> nwk_skey_;
   //   std::array<uint8_t, 16> app_skey_;

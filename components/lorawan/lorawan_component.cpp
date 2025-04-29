@@ -85,7 +85,7 @@ void LoRaWANComponent::on_radio_receive_(const std::vector<uint8_t> &packet) {
 }
 
 
-void LoRaWANComponent::process_join_response(const LoRaWANPacket lorawan_packet){
+bool LoRaWANComponent::process_join_response(const LoRaWANPacket lorawan_packet){
 
   std::vector<uint8_t> decrypted;
   LoRaWANCrypto::decrypt_join_accept(lorawan_packet, decrypted);
@@ -99,6 +99,8 @@ void LoRaWANComponent::process_join_response(const LoRaWANPacket lorawan_packet)
     decrypted[7], decrypted[8], decrypted[9], decrypted[10]  // LSB order
   };
   this->session_->set_dev_addr(dev_addr);    
+
+  return true;
 }
 
 }  // namespace lorawan
